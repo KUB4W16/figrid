@@ -1,3 +1,4 @@
+!['cover image'](cover.png)
 **figrid is an advanced plugin for creating grids from basic figma elements. Powerful and simple.**
 
 ## About
