@@ -5,6 +5,27 @@ const SHAPES = {
   triangle: "TRIANGLE",
   ellipse: "ELLIPSE",
   star: "STAR",
+  selection: "SELECTION",
+};
+
+const image = new Image();
+var selection_size = 0;
+
+onmessage = (event) => {
+  if (event.data.pluginMessage.type === "selection") {
+    image.src =
+      "data:image/svg+xml;base64," + event.data.pluginMessage.selection;
+    selection_size = event.data.pluginMessage.size; //!jak coś to usunąć
+  } else if (event.data.pluginMessage.type === "selection_too_complex") {
+    image.src = "";
+    document.querySelector("#size").value = event.data.pluginMessage.height;
+  } else if (event.data.pluginMessage.type === "selection_empty") {
+    var elementToRemove = document.querySelector(
+      ".section__selector__option[data-shape=SELECTION]"
+    );
+    console.log(elementToRemove);
+    elementToRemove.parentNode.removeChild(elementToRemove);
+  }
 };
 
 window.addEventListener("load", loaded);
@@ -53,6 +74,10 @@ function drawGrid(canvas, ctx, countX, countY, size, gap, fill, stroke, shape) {
         ctx.lineTo(x + size / 4, y + (size / 3) * 1.75);
         ctx.lineTo(x + size / 3, y + size / 4);
         ctx.lineTo(x, y);
+      } else if (shape === SHAPES.selection) {
+        let h = size;
+        let w = (image.width * h) / image.height;
+        ctx.drawImage(image, x, y, w, h);
       } else {
         ctx.beginPath();
         ctx.rect(x, y, size, size);
@@ -239,11 +264,33 @@ function loaded() {
   options.forEach((option) => {
     inputsList.push(option);
     option.addEventListener("click", () => {
+      // console.log(
+      //   option.dataset.shape === "SELECTION" && !image.src,
+      //   option.dataset.shape,
+      //   image.src
+      // );
       for (const sibling of option.parentElement.children) {
         sibling.classList.remove("section__selector__option--active");
       }
       option.classList.toggle("section__selector__option--active");
       refreshCanvas();
+      if (option.dataset.shape === "SELECTION") {
+        document
+          .querySelector(".section__text")
+          .classList.add("section__text--active");
+        sizeInput.value = selection_size; //!last change
+      } else {
+        document
+          .querySelector(".section__text")
+          .classList.remove("section__text--active");
+      }
+      if (option.dataset.shape === "SELECTION" && !image.src) {
+        var previewCover = document.querySelector(".section__preview__cover");
+        previewCover.style.display = "flex";
+      } else {
+        var previewCover = document.querySelector(".section__preview__cover");
+        previewCover.style.display = "none";
+      }
     });
   });
 
