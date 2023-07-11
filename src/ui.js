@@ -9,13 +9,11 @@ const SHAPES = {
 };
 
 const image = new Image();
-var selection_size = 0;
-
 onmessage = (event) => {
+  console.log(event);
   if (event.data.pluginMessage.type === "selection") {
     image.src =
       "data:image/svg+xml;base64," + event.data.pluginMessage.selection;
-    selection_size = event.data.pluginMessage.size; //!jak coś to usunąć
   } else if (event.data.pluginMessage.type === "selection_too_complex") {
     image.src = "";
     document.querySelector("#size").value = event.data.pluginMessage.height;
@@ -77,6 +75,9 @@ function drawGrid(canvas, ctx, countX, countY, size, gap, fill, stroke, shape) {
       } else if (shape === SHAPES.selection) {
         let h = size;
         let w = (image.width * h) / image.height;
+        // !todo: poprawić układ canvasa
+        x = canvas.width / 2 - ((countX + 2) / 2) * (gap + w) + i * (w + gap);
+        y = canvas.height / 2 - ((countY + 2) / 2) * (gap + h) + j * (h + gap);
         ctx.drawImage(image, x, y, w, h);
       } else {
         ctx.beginPath();
@@ -209,8 +210,11 @@ function loaded() {
     var shape = document.querySelector(".section__selector__option--active")
       .dataset.shape;
     var strokeWidth = parseInt(strokeColorInput.widthInput.value, 10);
-
-    canvas.width = (countX + 3) * (size + gap) * 2;
+    let ratio =
+      image.width / image.height > 0 && shape === "SELECTION"
+        ? image.width / image.height
+        : 1;
+    canvas.width = (countX + 3) * (size * ratio + gap) * 2;
     canvas.height = (countY + 3) * (size + gap) * 2;
     canvas.style.width = canvas.width;
     canvas.style.height = canvas.height;
@@ -278,11 +282,16 @@ function loaded() {
         document
           .querySelector(".section__text")
           .classList.add("section__text--active");
-        sizeInput.value = selection_size; //!last change
+        let s = document.querySelector(".section--2x3");
+        s.querySelectorAll("input").forEach((i) => (i.disabled = true));
+        s.classList.add("section--disabled");
       } else {
         document
           .querySelector(".section__text")
           .classList.remove("section__text--active");
+        let s = document.querySelector(".section--2x3");
+        s.querySelectorAll("input").forEach((i) => (i.disabled = false));
+        s.classList.remove("section--disabled");
       }
       if (option.dataset.shape === "SELECTION" && !image.src) {
         var previewCover = document.querySelector(".section__preview__cover");

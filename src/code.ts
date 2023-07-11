@@ -157,13 +157,16 @@ figma.ui.onmessage = (msg) => {
           msg.fill.enabled = false;
           msg.stroke.enabled = false;
         }
-        shape.x = x * (msg.gap + msg.size);
-        shape.y = y * (msg.gap + msg.size);
         if (!(msg.shape === SHAPES.selection)) {
+          shape.x = x * (msg.gap + msg.size);
+          shape.y = y * (msg.gap + msg.size);
           shape.fills = [];
           shape.strokes = [];
           shape.resize(msg.size, msg.size);
         } else {
+          let ratio = shape.width / shape.height;
+          shape.x = x * (msg.gap + ratio * msg.size);
+          shape.y = y * (msg.gap + msg.size);
           let scale = msg.size / shape.height;
           shape.rescale(scale);
         }
