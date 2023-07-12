@@ -5,5 +5,3 @@ Step by step:
 * Open figrid and select fitting options
 * Below all options you will see preview of your pattern.
 * If everything looks as it should, simply click create.
-
-Figrid is open-source project, so you can check it's code here: https://github.com/KUB4W16/figrid.
