@@ -1,19 +1,11 @@
 !['cover image'](cover.png)
-**figrid is an advanced plugin for creating grids from basic figma elements. Powerful and simple.**
 
-## About
+Figrid helps you to create patterns by placing elements on grid in a way you chose. Thanks to this plugin you won't waste your time on copying and manually placig elements to make pattern, figrid will do it instead.
 
-This plugin makes creating grids easy. You just have to fill required data. Everything is previewed below, so you can see much about how is your grid looking.
+Step by step:
+* Select element you want to create pattern from. (optional)
+* Open figrid and select fitting options
+* Below all options you will see preview of your pattern.
+* If everything looks as it should, simply click create.
 
-## Fields
-
-To create grid you just have to fill the following fields and click `Create` button:
-
-- `X` takes the number of elements on the X axis.
-- `Y` takes the number of elements on the Y axis
-- `Size` size of a single element, in plugin it is represented by icon.
-- `Gap` gap between the elements, in plugin if is represented by icon.
-- `Fill` hexadecimal color and opacity of elements\` fill.
-- `Stroke` hexadecimal color and opacity of elements\` stroke.
-
-You can also set the background color of the preview canvas to see what your mesh looks like on a specific color.
+Figrid is open-source project, so you can check it's code here: https://github.com/KUB4W16/figrid.
